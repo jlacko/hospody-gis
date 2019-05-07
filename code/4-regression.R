@@ -1,7 +1,13 @@
 # vytvoření modelu, výpočet reziduí a jejich zmapování do leaflet objektu
 
-# simple does it - linear regression
-model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation)
+# simple does it - linear regression ----
+
+# kombinace vegetace a dat za administrative areas
+grid$pop_veg <- grid$pop * grid$vegetation # efekt vegetace na populaci
+grid$bed_veg <- grid$beds * grid$vegetation # efekt vegetace na 
+
+# vlastní model
+model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + pop_veg + bed_veg)
 
 print(summary(model))
 
@@ -10,7 +16,7 @@ resids <- model$residuals # extract residuals from model
 grid <- grid %>% # ... attach them to grid
    cbind(resids)
 
-
+# podat o všem zprávu (leafletem :) ----
 library(leaflet)
 library(htmltools)
 

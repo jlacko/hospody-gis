@@ -32,8 +32,6 @@ vltava <- RCzechia::reky() %>% # all the Czech rivers ...
 
 # mřížka ----
 
-plocha <- 5e6 # tj. x kilometrů čterečných
-
 # size of grid cells, in units of the CRS (i.e. meters for 5514)
 # grid_spacing <- sqrt(plocha) # tj. plocha čtverce = cíl
 grid_spacing <- sqrt(2*plocha/(3*sqrt(3))) # tj. plocha šestiúhelníku = cíl

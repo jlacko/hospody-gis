@@ -5,24 +5,27 @@ nir <- raster("./data/nir_prg-2018-06-30.tif") # near infrared kanál
 
 ndvi <- (nir - red) / (nir + red) # standardní index
 
-ndvim <- abs(ndvi) # modifikovaný index - bez záporných hodnot
+ndvim <- max(ndvi, 0) # modifikovaný index - bez záporných hodnot
 
-plot_ndvi_raster <- function() plot(ndvim, axes = F, box = F) 
+plot_ndvi_raster <- function() plot(ndvim, 
+                                    axes = F, 
+                                    legend = F,
+                                    box = F) 
+
 
 grid$vegetation <- 0 # inicializace nulou
 
 
-for (i in grid$id) {
+for (i in grid$id) { # iterace přes řádky gridu
    
    bunka <- grid$geometry[i] %>%  # i-tá buňka v gridu
       st_transform(crs = ndvim@crs@projargs) %>% # transformovaná do crs rasteru
       as("Spatial") # jako sp objekt = fuuuj! :)
    
-   grid$vegetation[i] <- crop(ndvim, bunka) %>% # index v buňce ...
-      cellStats(stat = "mean") # ... zprůměrovaný
+   grid$vegetation[i] <- crop(ndvim, bunka) %>% # index uvnitř buňky gridu ...
+      cellStats(stat = "mean") %>%  # ... zprůměrovaný,
+      na.omit() # ... a sanitizované NaN
 }
-
-grid$vegetation[is.nan(grid$vegetation)] <- 0 # sanitizovat nan
 
 # podat zprávu - obrázek ve mřížce
 plot_vege_grid <- ggplot() + # plot vegetation index
