@@ -33,11 +33,13 @@ asdf <- asdf %>%
 grid <- left_join(grid, 
                   asdf, by = 'id') # attach the temp structure
 
-grid <- st_transform(grid, 4326) # back to WGS84
+# back to safety of the WGS84...
+prazske_casti <- st_transform(prazske_casti, 4326)
+grid <- st_transform(grid, 4326)
 
 
-plot_beds_grid <- ggplot() + # plot hotel beds
-   geom_sf(data = grid, aes(fill = beds), color = 'gray50', alpha = 0.6) +
+plot_beds_casti <- ggplot() + # plot hotel beds original
+   geom_sf(data = prazske_casti, aes(fill = beds), color = 'gray66', alpha = 0.6) +
    scale_fill_gradient2(low = 'green2',
                         mid = 'yellow',
                         high = 'red3',
@@ -51,8 +53,38 @@ plot_beds_grid <- ggplot() + # plot hotel beds
          axis.title.x = element_blank(),
          legend.text.align = 1)
 
-plot_pop_grid <- ggplot() + # plot population
-   geom_sf(data = grid, aes(fill = pop), color = 'gray50', alpha = 0.6) +
+plot_beds_grid <- ggplot() + # plot hotel beds gridded
+   geom_sf(data = grid, aes(fill = beds), color = 'gray66', alpha = 0.6) +
+   scale_fill_gradient2(low = 'green2',
+                        mid = 'yellow',
+                        high = 'red3',
+                        na.value = 'white',
+                        name = 'hotel beds',
+                        labels = comma) +
+   geom_sf(data = vltava, color = 'slategray3', lwd = 1.25) +
+   geom_sf(data = obrys, fill = NA, color = 'gray75', lwd = 1, alpha = 0.6) +
+   theme_bw() +
+   theme(axis.title.y = element_blank(), 
+         axis.title.x = element_blank(),
+         legend.text.align = 1)
+
+plot_pop_casti <- ggplot() + # plot population original
+   geom_sf(data = prazske_casti, aes(fill = pop), color = 'gray66', alpha = 0.6) +
+   scale_fill_gradient2(low = 'green2',
+                        mid = 'yellow',
+                        high = 'red3',
+                        na.value = 'white',
+                        name = 'population',
+                        labels = comma) +
+   geom_sf(data = vltava, color = 'slategray3', lwd = 1.25) +
+   geom_sf(data = obrys, fill = NA, color = 'gray75', lwd = 1, alpha = 0.6) +
+   theme_bw() +
+   theme(axis.title.y = element_blank(), 
+         axis.title.x = element_blank(),
+         legend.text.align = 1)
+
+plot_pop_grid <- ggplot() + # plot population gridded
+   geom_sf(data = grid, aes(fill = pop), color = 'gray66', alpha = 0.6) +
    scale_fill_gradient2(low = 'green2',
                         mid = 'yellow',
                         high = 'red3',
