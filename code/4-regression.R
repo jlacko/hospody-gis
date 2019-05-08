@@ -6,12 +6,18 @@
 grid$pop_veg <- grid$pop * grid$vegetation # efekt vegetace na populaci
 grid$bed_veg <- grid$beds * grid$vegetation # efekt vegetace na 
 
-# vlastní model
-model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + pop_veg + bed_veg)
+# jednoduchý model
+model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation)
 
 print(summary(model))
 
-resids <- model$residuals # extract residuals from model
+# složitější model
+sl_model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + pop_veg + bed_veg)
+
+print(summary(sl_model))
+
+
+resids <- sl_model$residuals # extract residuals from model
 
 grid <- grid %>% # ... attach them to grid
    cbind(resids)
@@ -29,7 +35,7 @@ grid <- grid %>% # create a HTML formatted popup label of grid cell
 
 lplot <- leaflet() %>%
    addProviderTiles(providers$CartoDB.Positron) %>%
-   setView(lng = 14.46, lat = 50.07, zoom = 11) %>%
+   setView(lng = 14.46, lat = 50.07, zoom = 10) %>%
    addPolygons(data = grid, 
                fillColor = ~pal(resids),
                fillOpacity = 0.5,

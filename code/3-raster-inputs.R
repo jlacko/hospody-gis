@@ -7,10 +7,21 @@ ndvi <- (nir - red) / (nir + red) # standardní index
 
 ndvim <- max(ndvi, 0) # modifikovaný index - bez záporných hodnot
 
-plot_ndvi_raster <- function() plot(ndvim, 
-                                    axes = F, 
-                                    legend = F,
-                                    box = F) 
+mod_ndvim <- ndvim %>%  
+   as("SpatialPixelsDataFrame") %>% 
+   as_data_frame()
+
+plot_vege_raster <- ggplot() +
+   geom_raster(data = mod_ndvim, aes(x=x, y=y, fill=layer), alpha=1) +
+   scale_fill_gradientn(colors = rev(terrain.colors(7)),
+                        limits = c(0, 1), 
+                        name = "NDVI (abs.)") +
+   coord_equal() +
+   theme_bw() +
+   theme(axis.title.y = element_blank(), 
+         axis.title.x = element_blank(),
+         legend.text.align = 1) +
+   coord_sf(datum = NULL)
 
 
 grid$vegetation <- 0 # inicializace nulou
@@ -29,11 +40,10 @@ for (i in grid$id) { # iterace přes řádky gridu
 
 # podat zprávu - obrázek ve mřížce
 plot_vege_grid <- ggplot() + # plot vegetation index
-   geom_sf(data = grid, aes(fill = vegetation), color = 'gray50', alpha = 0.7) +
-   scale_fill_gradient2(low = 'yellow',
-                        high = 'green2',
-                        midpoint = 0.4,
-                        name = 'vegetation index') +
+   geom_sf(data = grid, aes(fill = vegetation), color = 'gray66', alpha = 1) +
+   scale_fill_gradientn(colors = rev(terrain.colors(7)),
+                        limits = c(0, 1),
+                        name = 'NDVI (avg.)') +
    geom_sf(data = vltava, color = 'slategray3', lwd = 1.25) +
    geom_sf(data = obrys, fill = NA, color = 'gray75', lwd = 1, alpha = 0.6) +
    theme_bw() +
