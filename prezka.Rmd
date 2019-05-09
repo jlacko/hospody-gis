@@ -1,0 +1,219 @@
+---
+title: 'Počítání pražských putyk'
+subtitle: 'případová studie na GIS v erku'
+author: 'Jindra Lacko'
+date: '<br>22.5.2019 @ Etnetera'
+output:
+  xaringan::moon_reader:
+    css: ["default", "./libs/JLA-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include=FALSE, cache = T}
+options(htmltools.dir.version = FALSE)
+
+source("./code/0-orchestrace.R")
+```
+# Agenda
+
+--
+
+## Optimizace distribuční sítě - bary v Praze (záminka)
+
+--
+
+## Představení GIS práce v erku (vážná věc)
+
+--
+
+### ✔️️ Bodová data
+
+--
+
+### ✔️️ Data za administrativní oblasti (polygony)
+
+--
+
+### ✔️️ Rasterová data (snímky ze satelitu)
+
+--
+
+## Statistická analýza nad prostorovými daty
+
+---
+
+# Cílem optimalizace bude
+
+--
+
+## *Najít* matematický model, který vyjadřuje závislost
+
+--
+
+## *Uplatnit* nalezený model, a ukázat odchylky
+
+--
+
+## Z nalezených odchylek *identifikovat*:
+
+--
+
+### ✔ příliš řidká místa (kandidáty na zahuštění)  
+
+--
+
+### ✔ příliš hustá místa (kandidáty na pročištění)
+
+---
+
+# Použitá data
+
+--
+
+### Dataset `r formatC(nrow(bars), big.mark = " ")` pražských barů (jméno a souřadnice)
+
+--
+
+### Populace po městských částech - [otevřená data ČSÚ](https://www.czso.cz/csu/czso/otevrena_data)
+
+--
+
+### Hotelová lůžka po městských částech - [otevřená data ČSÚ](https://www.czso.cz/csu/czso/otevrena_data)
+
+--
+
+### Souřadnice stanic metra - [Open Data hl. m. Prahy](http://opendata.praha.eu/dataset/ipr-prazska_integrovana_doprava_-_vstupy_do_metra)
+
+--
+
+### Satelitní snímkování - [Copernicus / Sentinel](http://copernicus.gov.cz/pristup-k-datum) za 30. červen 2018
+
+---
+# Společný jmenovatel - mřížka (grid)
+--
+```{r grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_grid_empty
+```
+
+---
+# Přehled barů - body
+--
+```{r bary-body, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_bary_body
+```
+---
+
+# Přehled barů - heatmapa
+--
+```{r bary-dens, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_bary_dens
+```
+---
+
+# Přehled barů - grid
+--
+```{r bary-grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_bary_grid
+```
+---
+
+# Přehled populace - části
+--
+```{r pop-casti, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_pop_casti
+```
+---
+
+# Přehled populace - grid
+--
+```{r pop-grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_pop_grid
+```
+---
+
+# Přehled hotelových lůžek - části
+--
+```{r beds-casti, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_beds_casti
+```
+---
+
+# Přehled hotelových lůžek - grid
+--
+```{r beds-grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_beds_grid
+```
+---
+
+# Přehled stanic metra - body
+--
+```{r metro-body, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_metro_body
+```
+---
+# Přehled stanic metra - grid
+--
+```{r metro-grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_metro_grid
+```
+
+
+---
+# Kvalita vegetace - raster
+--
+```{r ndvi-raster,echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_vege_raster
+```
+---
+
+# Kvalita vegetace - grid
+--
+```{r ndvi-grid,echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_vege_grid
+```
+---
+
+# Základní model
+```{r base-model,echo = F, cache = F, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+summary(model)
+```
+--
+
+Na uživení hospody je potřeba: buď `r formatC(round(1/model$coefficients["pop"]), big.mark = " ", decimal = 0)` místňáků, nebo `r formatC(round(1/model$coefficients["beds"]), big.mark = " ")` hotelových lůžek, v okolí `r plocha/1e6` kilometrů čtverečných.
+
+---
+# Modifikovaný model
+```{r engineered-model, echo = F, cache = F, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+summary(sl_model)
+```
+
+---
+# Závěrečná prezentace - rezidua v mapě
+
+```{r leaflet-plot, echo = F, eval = T, cache = T, message = F, out.height='75%', out.width='100%'}
+
+lplot
+
+```
+
+---
+class: inverse, middle, center
+
+# Děkuji za pozornost
+
+--
+<br>
+## Prezentace – včetně dat a kódu – je na GitHubu   
+## [https://github.com/jlacko/hospody-gis](https://github.com/jlacko/hospody-gis)  
+
+--
+<br><br>
+Jindra Lacko  
+[jindra@jla-data.net](mailto:jindra@jla-data.net)  
+[www.jla-data.net](http://www.jla-data.net)  
+
