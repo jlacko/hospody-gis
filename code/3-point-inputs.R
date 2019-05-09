@@ -23,7 +23,7 @@ plot_metro_body <- ggplot() + # plot metro stations as points
          axis.title.x = element_blank())
 
 plot_metro_grid <- ggplot() + # plot metro stations gridded
-   geom_sf(data = grid, aes(fill = stations), color = 'gray50', alpha = 0.6) +
+   geom_sf(data = grid, aes(fill = stations), color = 'gray66', alpha = 0.6) +
    scale_fill_gradient2(low = 'green2',
                         mid = 'yellow',
                         high = 'red3',

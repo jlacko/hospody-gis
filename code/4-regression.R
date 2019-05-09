@@ -3,8 +3,8 @@
 # simple does it - linear regression ----
 
 # kombinace vegetace a dat za administrative areas
-grid$pop_veg <- grid$pop * grid$vegetation # efekt vegetace na populaci
-grid$bed_veg <- grid$beds * grid$vegetation # efekt vegetace na 
+grid$pop_times_veg <- grid$pop * grid$vegetation # efekt vegetace na populaci
+grid$bed_times_veg <- grid$beds * grid$vegetation # efekt vegetace na hotelová lůžka
 
 # jednoduchý model
 model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation)
@@ -12,7 +12,8 @@ model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation)
 print(summary(model))
 
 # složitější model
-sl_model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + pop_veg + bed_veg)
+sl_model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + 
+                  pop_times_veg + bed_times_veg)
 
 print(summary(sl_model))
 
