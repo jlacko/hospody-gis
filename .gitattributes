@@ -1,7 +1,12 @@
 # pomocné soubory od Xaringanu / remark.js
-#=========================================
+# ========================================
+
 libs/* linguist-vendored
-*_files/* linguist-vendored
+
+# vlastní prezka
+# ==============
+*.html linguist-documentation
+*_files/* linguist-documentation
 
 # Source files
 # ============
