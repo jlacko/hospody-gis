@@ -1,0 +1,14 @@
+# pomocné soubory od Xaringanu / remark.js
+#=========================================
+libs/* linguist-vendored
+*_files/* linguist-vendored
+
+# Source files
+# ============
+*.Rdata text
+*.rdb   binary
+*.rds   binary
+*.Rd    text
+*.Rdx   binary
+*.Rmd	text
+*.R  	text
