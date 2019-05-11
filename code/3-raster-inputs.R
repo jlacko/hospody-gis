@@ -35,7 +35,8 @@ for (i in grid$id) { # iterace přes řádky gridu
    
    grid$vegetation[i] <- crop(ndvim, bunka) %>% # index uvnitř buňky gridu ...
       cellStats(stat = "mean") %>%  # ... zprůměrovaný,
-      na.omit() # ... a sanitizované NaN
+      na.omit() %>%  # ... a sanitizované NaN
+      max(0) # a omezené na nulu - pro průsečíky se slivers na krajích
 }
 
 # podat zprávu - obrázek ve mřížce
