@@ -23,6 +23,14 @@ Za prvé: prokázat závislost hospod na:
 * infrastruktuře (stanicích metra)   
 * zdraví vegetace (indexu NDVI = Normalized Difference Vegetation Index)   
 
-Za druhé: ukázat využití dat bodových, administrativně-celkových a satelitně snímkovacích v erkovém statistickém modelu.
+Za druhé: ukázat využití:
+
+* bodových dat (prostých souřadnic), 
+* administrativně-celkových dat (polygonů) a 
+* satelitně snímkovacích dat (rastrů)
+
+v erkovém statistickém modelu.
 
 Nikoliv nutně v tomto pořadí :)
+
+Pro prezentaci v HTML navštivte [tento link](https://rawcdn.githack.com/jlacko/hospody-gis/63dd63231402c4651315be695af12597bafaf826/prezka.html#1), pro náhled na podkladový zdroják doporučuji vyklonovat repo do RStudia.
