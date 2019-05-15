@@ -6,12 +6,17 @@
 grid$pop_times_veg <- grid$pop * grid$vegetation # efekt vegetace na populaci
 grid$bed_times_veg <- grid$beds * grid$vegetation # efekt vegetace na hotelová lůžka
 
-# jednoduchý model
+# baseline - jediná nezávislá veličina (populace)
+bl_model <- lm(data = grid, barcount ~ pop)
+
+print(summary(bl_model))
+
+# jednoduchý model - čtyři nezávislé veličiny
 model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation)
 
 print(summary(model))
 
-# složitější model
+# složitější model - čtyři nezávislé veličiny + dvě interakce
 sl_model <- lm(data = grid, barcount ~ pop + beds + stations + vegetation + 
                   pop_times_veg + bed_times_veg)
 
@@ -19,9 +24,11 @@ print(summary(sl_model))
 
 
 resids <- sl_model$residuals # extract residuals from model
+predikce <- sl_model$fitted.values # předpovědi z modelu
 
 grid <- grid %>% # ... attach them to grid
-   cbind(resids)
+   cbind(resids) %>% 
+   cbind(predikce)
 
 # podat o všem zprávu (leafletem :) ----
 library(leaflet)
@@ -31,8 +38,9 @@ library(htmltools)
 pal <- colorBin(palette = "RdYlGn",  domain = grid$resids,  bins = 5,  reverse = T)
 
 grid <- grid %>% # create a HTML formatted popup label of grid cell
-   mutate(label = paste0('O ', round(abs(resids)),' hospod <u>', 
-                         ifelse(resids > 0, 'více', 'méně'),'</u> nežli očekáváno'))
+   mutate(label = paste0('Predikce ', round(predikce),' hospod, <br>',
+                         'skutečnost ', barcount, ', ', 'rozdíl ',
+                         ifelse(resids > 0, '+', '-'), abs(round(resids)), '.'))
 
 lplot <- leaflet() %>%
    addProviderTiles(providers$CartoDB.Positron) %>%
