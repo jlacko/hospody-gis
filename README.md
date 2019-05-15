@@ -33,4 +33,4 @@ v erkovém statistickém modelu.
 
 Nikoliv nutně v tomto pořadí :)
 
-Pro prezentaci v HTML navštivte [tento link](https://rawcdn.githack.com/jlacko/hospody-gis/63dd63231402c4651315be695af12597bafaf826/prezka.html#1), pro náhled na podkladový zdroják doporučuji vyklonovat repo do RStudia.
+## Pro prezentaci v HTML navštivte [tento link](https://raw.githack.com/jlacko/hospody-gis/master/prezka.html), pro náhled na podkladový zdroják doporučuji vyklonovat repo do RStudia.
