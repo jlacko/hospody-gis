@@ -31,7 +31,7 @@ source("./code/0-orchestrace.R")
 
 --
 
-### ✔️️ Bodová data
+### ✔️️ Bodová data (souřadnice)
 
 --
 
@@ -107,14 +107,6 @@ plot_grid_empty
 plot_bary_body
 ```
 ---
-
-# Přehled barů – heatmapa
---
-```{r bary-dens, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
-plot_bary_dens
-```
----
-
 # Přehled barů – grid
 --
 ```{r bary-grid, echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
@@ -206,6 +198,21 @@ Na uživení hospody je potřeba: buď `r formatC(round(1/model$coefficients["po
 ```{r sophisticated-model, echo = F, cache = F, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
 summary(sl_model)
 ```
+
+---
+# Alternativa – 4 proměnné (Poisson)
+--
+```{r poisson-model, echo = F, cache = F, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+summary(poi_model)
+```
+---
+
+# Histogram reziduálů přes modely
+--
+```{r resid-plot,echo = F, cache = T, out.width = '85%', fig.align="left", fig.asp = 0.55, dpi = 150}
+plot_resids
+```
+
 
 ---
 # Závěrečná prezentace – rezidua v mapě
