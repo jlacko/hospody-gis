@@ -12,7 +12,7 @@ pruseciky <- st_join(metro, grid) %>%
 grid <- left_join(grid, pruseciky, by = 'id') # NAčka zůstávají jako NAčka
 
 metro_body <- st_coordinates(metro) %>% # stanice metra jako data frame
-   as_data_frame()
+   as_tibble()
 
 plot_metro_body <- ggplot() + # plot metro stations as points
    geom_point(data = metro_body, aes(X, Y), pch = 4, alpha = 0.7, col = "red") +

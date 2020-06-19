@@ -16,7 +16,7 @@ bars <- read_csv("./data/prague_bars.csv") # read the bar data in
 
 obrys <- RCzechia::kraje("high") %>% # all the Czech NUTS3 entities ...
    filter(KOD_CZNUTS3 == 'CZ010') %>% #  ... just Prague
-   pull(geometry) %>% # only the boundaries (no data)
+   st_geometry() %>% # only the boundaries (no data)
    st_transform(5514) # to a metric CRS (for the buffer to work)
 
 bbox <- obrys %>%
@@ -24,11 +24,7 @@ bbox <- obrys %>%
 
 obrys <- st_transform(obrys, 4326) # back to WGS84
 
-vltava <- RCzechia::reky() %>% # all the Czech rivers ...
-   filter(NAZEV == 'Vltava') %>% # ... the one relevant
-   st_transform(5514) %>% # to a metric CRS
-   st_intersection(bbox) %>% # clip to the box around Prague
-   st_transform(4326) # back to WGS84
+vltava <- RCzechia::reky("Praha") 
 
 # mřížka ----
 
